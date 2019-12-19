@@ -1,0 +1,154 @@
+---
+title: How I Learned to Start Worrying and Love Grafana & Prometheus
+date: "2019-12-19"
+description: "Maybe living in ignorance is a better idea but graphs are fun to look at, let's go!"
+---
+
+![banner](./coolio.png)
+
+Running a remotely popular website, you'll eventually fall headfirst into a situation where a friendly user nudges you with the exciting information that the site is slow or just doesn't load. You might stumble upon the message a couple of hours after, how do you troubleshoot the past? Was it the database? Was there a hint in the nginx logs or did we suddenly choke on too many open connections? You might ask the user if they could elaborate further but this will likely in most cases not lead to the most useful information.
+
+> 2019-08-20 20:35 Dashi: sarge burned the entire wiki down
+
+![djeeta](./djeetathink.png)
+
+Is there a remedy to this or are we just simply *lost* in the sea of **50GB** nginx access logs? A helpful measure is to actually keep track of everything and not just rely on your default web server logs. Furiously greping logs just to find something hidden will not always work if you're not already sure about what you're looking for.
+
+Thanks to the combination of Prometheus and Grafana, we can take a quick look at the current status of our entire stack or during a specific time/date range.
+
+## Prometheus
+Prometheus is a monitoring system and a time-series database, which sounds perfect for our use case. It works by scraping metrics from your monitored targets, usually by HTTP endpoints. This post will assume you're using either Debian or Ubuntu but it will most likely not be very different on other distros.
+
+First, we'll need to download the package containing Prometheus: [prometheus.io/download](https://prometheus.io/download/). You'll want the Linux amd64 version that isn't a release candidate (rc in the version name).
+
+
+Let's wget it into our server.
+```bash
+wget https://github.com/prometheus/prometheus/releases/download/v2.14.0/prometheus-2.14.0.linux-amd64.tar.gz
+```
+And then we need to extract the files from the tar gzipped archive.
+```bash
+tar xvzf prometheus-2.14.0.linux-amd64.tar.gz
+```
+You'll now have a folder full of Prometheus!
+
+Let's copy the configuration to its own folder in /etc.
+```bash
+cd prometheus-2.14.0.linux-amd64/
+mkdir /etc/prometheus
+cp -R prometheus.yml consoles/ console_libraries/ /etc/prometheus
+```
+
+Now we need to copy the executable, create a user which is isolated to /bin/false and give it permissions over the executable.
+```bash
+cp prometheus promtool /usr/local/bin
+useradd -rs /bin/false prometheus
+chown prometheus:prometheus /usr/local/bin/prometheus
+```
+
+We also need to create a writeable data folder for Prometheus, let's pick ```/opt/prometheus``` and give the user permissions.
+```bash
+mkdir -p /opt/prometheus/data
+chown -R prometheus:prometheus /opt/prometheus/data /etc/prometheus/*
+```
+Now we have all the files needed, now we only lack a systemd service that will handle starting and stopping Prometheus.
+
+Create a file named ```/lib/systemd/system/prometheus.service``` with the following contents
+```bash
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path="/opt/prometheus/data" \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries \
+  --web.listen-address=0.0.0.0:9090 \
+  --web.enable-admin-api
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+If you did everything correctly, you should be able to enable (start the service on boot) and start the service.
+```
+systemctl start prometheus
+systemctl enable prometheus
+```
+You can check if it's running with ```systemctl status prometheus```, if it's active, you've done everything correctly so far!
+
+We can now access the web interface at ```http://yourserverip:9090``` to see if Prometheus works.
+
+![banner](./itsalive.png)
+
+It works! Prometheus will have one default standard monitor target, itself. We can check it out by pressing status and then targets.
+
+![banner](./targets1.png)
+
+![woah](./woah.png)
+
+Prometheus does sadly not support TLS or authentication, we can fix this by installing nginx and use it as a reverse proxy for Prometheus.
+We also want to set basic auth for Prometheus and generate a certificate so everything will communicate with TLS to it.
+```bash
+apt-get install nginx gnutls-bin apache2-utils
+```
+We have now the required tools for it, let's generate a htpasswd file for nginx.
+```
+htpasswd -c /etc/prometheus/.htpasswd admin
+```
+And now we generate the certificate we will use.
+```
+mkdir /etc/ssl/prometheus
+certtool --generate-privkey --outfile /etc/ssl/prometheus/prometheus-privkey.pem
+certtool --generate-self-signed --load-privkey prometheus-privkey.pem --outfile /etc/ssl/prometheus/prometheus-cert.pem
+```
+We can now create the nginx config for our reverse proxy, create ```/etc/nginx/conf.d/prometheus.conf``` with the content:
+```bash
+server {
+    listen 5555 ssl;
+    ssl_certificate /etc/ssl/prometheus/prometheus-cert.pem;
+    ssl_certificate_key /etc/ssl/prometheus/prometheus-privkey.pem;
+
+    location / {
+      auth_basic           "Prometheus";
+      auth_basic_user_file /etc/prometheus/.htpasswd;
+      proxy_pass           http://localhost:9090/;
+    }
+}
+```
+We will now have to go back to the systemd service file for Prometheus, ```/lib/systemd/system/prometheus.service```.
+
+We are changing ```--web.listen-address=0.0.0.0:9090 ``` to listen to only localhost with ```--web.listen-address=127.0.0.1:9090``` instead.
+
+We're also adding ```--web.external-url=https://yourserverip:5555``` so the web interface does not get confused being behind a reverse proxy.
+
+This is how it will look eventually:
+```bash
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path="/opt/prometheus/data" \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries \
+  --web.listen-address=127.0.0.1:9090 \
+  --web.external-url=https://yourserverip:5555
+```
+Now we're done, we will need to reload the service file for Prometheus and restart Prometheus and nginx.
+```
+systemctl daemon-reload
+systemctl restart prometheus
+systemctl restart nginx
+```
+Let's check if the reverse proxy works with cURL! ```curl -u admin -k https://yourserverip:5555/metrics```
+
+If you received a heck a lot of data, you've done it! yay! 👍 If you did not, you probably missed a step! 👎
+
+## Grafana
+Now we need some juicy way to display our delicious new metrics and what's a better way than with fancy charts and handsome bars? The thing that will help us with this is Grafana!
+
+*to be continued when I'm not tired.*
