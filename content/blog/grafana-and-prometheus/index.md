@@ -77,7 +77,7 @@ Restart=always
 WantedBy=multi-user.target
 ```
 If you did everything correctly, you should be able to enable (start the service on boot) and start the service.
-```
+```text
 systemctl start prometheus
 systemctl enable prometheus
 ```
@@ -99,11 +99,11 @@ We also want to set basic auth for Prometheus and generate a certificate so ever
 apt-get install nginx gnutls-bin apache2-utils
 ```
 We have now the required tools for it, let's generate a htpasswd file for nginx.
-```
+```text
 htpasswd -c /etc/prometheus/.htpasswd admin
 ```
 And now we generate the certificate we will use.
-```
+```text
 mkdir /etc/ssl/prometheus
 certtool --generate-privkey --outfile /etc/ssl/prometheus/prometheus-privkey.pem
 certtool --generate-self-signed --load-privkey prometheus-privkey.pem --outfile /etc/ssl/prometheus/prometheus-cert.pem
@@ -139,7 +139,7 @@ ExecStart=/usr/local/bin/prometheus \
   --web.external-url=https://yourserverip:5555
 ```
 Now we're done, we will need to reload the service file for Prometheus and restart Prometheus and nginx.
-```
+```text
 systemctl daemon-reload
 systemctl restart prometheus
 systemctl restart nginx
@@ -151,4 +151,33 @@ If you received a heck a lot of data, you've done it! yay! 👍 If you did not, 
 ## Grafana
 Now we need some juicy way to display our delicious new metrics and what's a better way than with fancy charts and handsome bars? The thing that will help us with this is Grafana!
 
-*to be continued when I'm not tired.*
+We will use the official repository Grafana provides to install the package from so we need to add the repository and also add their GPG key so we can install their signed packages.
+```bash
+add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+```
+We can now start the grafana-server with ```systemctl start grafana-server``` and if everything worked, you should be able to see the web interface at ```http://yourserverip:3000```! If it did not, you can check why it did not start with ```systemctl status grafana-server```.
+
+![banner](./grafanaLogin.png)
+
+Your can login with username: **admin** and password: **admin**, you'll be asked to change the password on first log-in.
+
+Now we just need to add Prometheus as a Grafana datasource so we can take advantage of it!
+
+![banner](./grafanaSplash.png)
+
+Press *Add data source*, select Prometheus and input the settings like this. Make sure that the settings are correct based on how the nginx reverse proxy was setup!
+
+![banner](./grafanaPrometheusSource.png)
+
+You can now press **Save & Test**, it should tell you that everything works if you did everything correctly so far!
+
+You should now be able to press Dashboards -> Manage and find a Dashboard with the name **Prometheus 2.0 Stats**.
+
+Cool you now have your **first** dashboard!
+
+![banner](./grafanaExampleDashboard.png)
+
+Just the metrics of Prometheus itself isn't very interesting, so let's add some exporters for Prometheus to gobble.
+
+*WIP: insert link to exporter page, i guess*
