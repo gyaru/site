@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Script-type" content="text/javascript">
+<meta http-equiv="Content-Style-type" content="text/css">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-title" content="グラブル">
+<title>グランブルーファンタジー</title>
+<link rel="apple-touch-icon-precomposed" href="http://game-a.granbluefantasy.jp/assets/img/sp/touch_icon.png">
+<style class="init">
+#loading, #ready {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: -2000px;
+	z-index: 250000;
+}
+
+
+#pop-force .pop-usual .txt-popup-body{font-size:9px;color:#f2eee2;line-height:1;text-shadow:0px 0px 1px #150f0f,0px 0px 1px #150f0f,0px 0px 1px #150f0f,0px 0px 2px #150f0f,0px 0px 2px #150f0f,0px 0px 2px #150f0f}@-webkit-keyframes blink{0%{opacity:0.5}15%{opacity:1}85%{opacity:1}100%{opacity:0.5}}@keyframes blink{0%{opacity:0.5}15%{opacity:1}85%{opacity:1}100%{opacity:0.5}}@-webkit-keyframes scaleEffect{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}100%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:0.5}}@keyframes scaleEffect{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}100%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:0.5}}#pop-force .pop-usual.pop-show{-webkit-transition:-webkit-transform 0.24s ease;transition:transform 0.24s ease;-webkit-transform:translateY(0);transform:translateY(0)}#pop-force .pop-usual.pop-hide{-webkit-transition:-webkit-transform 0.24s ease;transition:transform 0.24s ease;-webkit-transform:translateY(10px);transform:translateY(10px)}@-webkit-keyframes pop-show{0%{-webkit-transform:scale(0, 0);transform:scale(0, 0);opacity:0}85%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:1}99.9%,100%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}}@keyframes pop-show{0%{-webkit-transform:scale(0, 0);transform:scale(0, 0);opacity:0}85%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:1}99.9%,100%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}}@-webkit-keyframes pop-hide{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}15%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:1}99.9%,100%{-webkit-transform:scale(0, 0);transform:scale(0, 0);opacity:0}}@keyframes pop-hide{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1);opacity:1}15%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1);opacity:1}99.9%,100%{-webkit-transform:scale(0, 0);transform:scale(0, 0);opacity:0}}@-webkit-keyframes riseup{0%{-webkit-transform:translate(0px, 7px);transform:translate(0px, 7px);opacity:0.0}15%{-webkit-transform:translate(0px, 1px);transform:translate(0px, 1px);opacity:1}85%{-webkit-transform:translate(0px, -1px);transform:translate(0px, -1px);opacity:1}100%{-webkit-transform:translate(0px, -7px);transform:translate(0px, -7px);opacity:0.0}}@keyframes riseup{0%{-webkit-transform:translate(0px, 7px);transform:translate(0px, 7px);opacity:0.0}15%{-webkit-transform:translate(0px, 1px);transform:translate(0px, 1px);opacity:1}85%{-webkit-transform:translate(0px, -1px);transform:translate(0px, -1px);opacity:1}100%{-webkit-transform:translate(0px, -7px);transform:translate(0px, -7px);opacity:0.0}}@-webkit-keyframes anim-button-scale-fade{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1)}99.9%,100%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1)}}@keyframes anim-button-scale-fade{0%{-webkit-transform:scale(1, 1);transform:scale(1, 1)}99.9%,100%{-webkit-transform:scale(1.1, 1.1);transform:scale(1.1, 1.1)}}#pop-force .pop-usual{position:absolute;top:50px;left:0px;z-index:300000;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transform:translateY(-5px);transform:translateY(-5px);width:320px;min-height:115px;display:none}#pop-force .pop-usual::before{-webkit-border-image:url('http://game-a.granbluefantasy.jp/assets/img/sp/ui/pop/ui_pop.png') 106 0 124 stretch round;-webkit-border-image:url('http://game-a.granbluefantasy.jp/assets/img/sp/ui/pop/ui_pop.png') 106 0 124 stretch round;border-image:url('http://game-a.granbluefantasy.jp/assets/img/sp/ui/pop/ui_pop.png') 106 0 124 fill stretch round;position:absolute;top:0px;right:0px;bottom:0px;left:0px;z-index:-1;border-width:53px 0 62px;content:""}#pop-force .pop-usual .prt-popup-header,#pop-force .pop-usual .prt-popup-header-sm{-webkit-box-sizing:border-box;box-sizing:border-box;height:53px;text-align:center;color:#150f0f;padding-top:18px}#pop-force .pop-usual .prt-popup-body,#pop-force .pop-usual .prt-popup-body-sm{-webkit-box-sizing:border-box;box-sizing:border-box;padding:0px 20px;width:320px}#pop-force .pop-usual .txt-popup-body,#pop-force .pop-usual .txt-popup-body-sm{font-size:12px;padding:10px 15px 5px;text-align:center;line-height:1.2}#pop-force .pop-usual .prt-popup-footer,#pop-force .pop-usual .prt-popup-footer-sm{-webkit-box-sizing:border-box;box-sizing:border-box;height:62px;text-align:center;padding-top:12px;font-size:0}
+</style>
+
+<link type="text/css" rel="stylesheet" href="http://game-a2.granbluefantasy.jp/assets/1596881595/css/common/index.css">
+<script>
+(function(){
+	window.displayInitialize = function() {
+			var deviceRatio = window.innerWidth / 320;
+			return deviceRatio;
+	};
+	window.fitScreenByZoom = function(deviceRatio) {
+		var html = document.getElementsByTagName('html')[0];
+		html.style.zoom = deviceRatio;
+	};
+	window.deviceRatio = window.displayInitialize();
+			window.fitScreenByZoom(window.deviceRatio);
+	})();
+</script>
+</head>
+<body>
+<div id="ready"></div>
+<div id="loading"><div class="img-load"></div></div>
+<div class="mask"></div>
+<div id="opaque-mask"></div>
+
+<script>
+	console.assert=console.error=console.log=console.time=console.timeEnd=console.warn=function(){};
+	window.location.href = 'http://game.granbluefantasy.jp/authentication';
+	window.location.reload();
+</script>
+</body>
+</html>
