@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>colours</title>
+    <style>
+        body {
+            background: #2b303b;
+            color: #FFF;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        }
+        .colourbar {
+            width: 1200px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .colourbar > div:first-child {
+            border: 1px;
+            border-style: solid;
+            border-color: #FFF;
+            width: 150px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .name {
+            font-size: 13px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .text-list {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            text-transform: uppercase;
+            justify-content: space-around;
+            font-size: 13px;
+        }
+
+        .text-hex {
+            width: 60px;
+        }
+
+        .text-rgb {
+            width: 110px;
+        }
+
+        .text-rgbp {
+            width: 650px;
+        }
+
+        .bar-list {
+            display: flex;
+            flex-direction: column;
+            text-transform: uppercase;
+        }
+
+        /* health */
+        .health-full {
+            background: #A3BF8C;
+        }
+
+        .health-half {
+            background: #EBCC8C;
+        }
+
+        .health-empty {
+            background: #BF616B;
+        }
+
+        .health-disconnected {
+            background: #BFC4CF;
+        }
+
+        .health-dead {
+            background: #2B303B;
+            
+        }
+
+        /* class */
+        .class-druid {
+            background: #ebab66
+        }
+
+        .class-hunter {
+            background: #6FA07D
+        }
+
+        .class-mage {
+            background: #769AFF;
+        }
+
+        .class-paladin {
+            background: #b48ead;
+        }
+
+        .class-priest {
+            background: #c0c5ce;
+        }
+
+        .class-rogue {
+            background: #f7f581;
+        }
+
+        .class-shaman {
+            background: #486c8f;
+        }
+
+        .class-warlock {
+            background: #7e79af;
+        }
+
+        .class-warrior {
+            background: #af8e79;
+        }
+
+        /* power */
+        .power-mana {
+            background: #486c8f;
+        }
+
+        .power-rage {
+            background: #BF616B;
+        }
+
+        .power-energy {
+            background: #f7f581;
+        }
+
+        /* reaction */
+        .reaction-neutral {
+            background: #f7f581;
+        }
+
+        .reaction-hostile {
+            background: #BF616B;
+        }
+
+        .reaction-friendly {
+            background: #A3BF8C;
+        }
+    </style>
+    <script>
+        function convertRGBtoHex(x) {
+            return '#' + x.match(/\d+/g).map(y => (+y).toString(16).padStart(2,0)).join``;
+        };
+        function convertRGBtoRGBP(x) {
+            return x.match(/\d+/g).map(y => (+y/255)).join` `;
+        }
+        function loopThroughBars() {
+            const allBars = document.querySelectorAll('.colourbar');
+            allBars.forEach(function(item) {
+                const currentBar = item.firstChild;
+                const style = getComputedStyle(currentBar);
+                const rgb = style.backgroundColor;
+                const rgbp = convertRGBtoRGBP(rgb);
+                const hex = convertRGBtoHex(rgb);
+                const textFields = item.querySelector('.text-list');
+                textFields.childNodes[0].textContent = hex;
+                textFields.childNodes[1].textContent = rgb;
+                textFields.childNodes[2].textContent = rgbp;
+            })
+        };
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log('hi~')
+            loopThroughBars();
+        })
+    </script>
+</head>
+
+<body>
+    <h1>lis colours</h1>
+    <div class="bar-list">
+        <h3>health</h3>
+        <div class="colourbar"><div class="health-full"><div class="name">full health</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb">163, 191, 140</div><div class="text-rgbp">64%, 75%, 55%</div></div></div>
+        <div class="colourbar"><div class="health-half"><div class="name">half health</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="health-empty"><div class="name">empty health</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="health-disconnected"><div class="name">disconnected</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="health-dead"><div class="name">dead</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+    </div>
+    <div class="bar-list">
+        <h3>class</h3>
+        <div class="colourbar"><div class="class-druid"><div class="name">druid</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-hunter"><div class="name">hunter</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-mage"><div class="name">mage</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-paladin"><div class="name">paladin</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-priest"><div class="name">priest</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-rogue"><div class="name">rogue</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-shaman"><div class="name">shaman</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-warlock"><div class="name">warlock</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="class-warrior"><div class="name">warrior</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+    </div>
+    <div class="bar-list">
+        <h3>power</h3>
+        <div class="colourbar"><div class="power-mana"><div class="name">mana</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="power-rage"><div class="name">rage</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="power-energy"><div class="name">energy</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+    </div>
+    <div class="bar-list">
+        <h3>reaction</h3>
+        <div class="colourbar"><div class="reaction-neutral"><div class="name">neutral</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="reaction-hostile"><div class="name">hostile</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+        <div class="colourbar"><div class="reaction-friendly"><div class="name">friendly</div></div><div class="text-list"><div class="text-hex"></div><div class="text-rgb"></div><div class="text-rgbp"></div></div></div>
+    </div>
+</body>
+
+</html>
