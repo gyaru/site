@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* because links are added to images, remove our underline */
+.gatsby-resp-image-link {
+  box-shadow: unset;
+}

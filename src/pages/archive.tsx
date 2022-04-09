@@ -1,52 +1,47 @@
 import * as React from "react";
-import Layout from "../components/layout";
 import { Link, graphql } from "gatsby";
+import Layout from "../components/layout";
 import styled from "styled-components";
 
 const StyledTitle = styled(Link)`
-  font-size: 30px;
+  font-size: 15px;
   text-decoration: none;
-  padding-bottom: 5px;
   color: #b48ead;
+  padding-left: 10px;
+  padding-right: 5px;
+  height: 18px;
 `;
 
 const StyledArticle = styled.article`
   font-family: "Raleway";
   color: #2b303b;
-  padding-bottom: 15px;
-  margin-bottom: 30px;
-  box-shadow: 0 1px 0 0 #c0c5ce;
-`;
-
-const StyledExcerpt = styled.p`
-  font-size: 17px;
-  margin: 15px 0 15px 0;
+  display: flex;
+  align-items: baseline;
 `;
 
 const StyledDate = styled.p`
   margin: 0;
   color: #c0c5ce;
   font-size: 15px;
+  width: 150px;
 `;
 
 const StyledTag = styled.p`
   margin: 0;
   color: #c0c5ce;
-  font-size: 15px;
-  padding-left: 10px;
-`;
-
-const MetaData = styled.div`
-  display: flex;
+  font-size: 10px;
+  padding-right: 5px;
+  height: 18px;
 `;
 
 function Tag(props: { name: string }) {
   return <StyledTag>#{props.name}</StyledTag>;
 }
 
-const IndexPage = ({ data }) => {
+const ArchivePage = ({ data }) => {
+  console.log(data);
   return (
-    <Layout pageTitle="Home Page">
+    <Layout pageTitle="Archive">
       {data.allMdx.nodes.map(
         (node: {
           id: React.Key;
@@ -59,16 +54,13 @@ const IndexPage = ({ data }) => {
           };
         }) => (
           <StyledArticle key={node.id}>
+            <StyledDate>{node.frontmatter.date}</StyledDate>
             <StyledTitle to={`/posts/${node.slug}`}>
               {node.frontmatter.title}
             </StyledTitle>
-            <StyledExcerpt>{node.excerpt}</StyledExcerpt>
-            <MetaData>
-              <StyledDate>{node.frontmatter.date}</StyledDate>
-              {node.frontmatter.tags.map((node) => (
-                <Tag name={node} />
-              ))}
-            </MetaData>
+            {node.frontmatter.tags.map((node) => (
+              <Tag name={node} />
+            ))}
           </StyledArticle>
         )
       )}
@@ -93,4 +85,4 @@ export const query = graphql`
   }
 `;
 
-export default IndexPage;
+export default ArchivePage;
