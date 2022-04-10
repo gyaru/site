@@ -44,6 +44,7 @@ function Tag(props: { name: string }) {
   return <StyledTag>#{props.name}</StyledTag>;
 }
 
+// TODO: fix correct types
 const IndexPage = ({ data }) => {
   return (
     <Layout pageTitle="Home Page">

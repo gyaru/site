@@ -9,6 +9,7 @@ specifiers:
   '@types/node': ^17.0.23
   '@types/react': ^17.0.43
   '@types/react-dom': ^17.0.14
+  '@types/react-helmet': ^6.1.5
   '@types/styled-components': ^5.1.25
   babel-eslint: ^10.1.0
   babel-plugin-styled-components: ^2.0.7
@@ -69,6 +70,7 @@ devDependencies:
   '@types/node': 17.0.23
   '@types/react': 17.0.44
   '@types/react-dom': 17.0.15
+  '@types/react-helmet': 6.1.5
   '@types/styled-components': 5.1.25
   typescript: 4.6.3
 
@@ -3049,6 +3051,12 @@ packages:
 
   /@types/react-dom/17.0.15:
     resolution: {integrity: sha512-Tr9VU9DvNoHDWlmecmcsE5ZZiUkYx+nKBzum4Oxe1K0yJVyBlfbq7H3eXjxXqJczBKqPGq3EgfTru4MgKb9+Yw==}
+    dependencies:
+      '@types/react': 17.0.44
+    dev: true
+
+  /@types/react-helmet/6.1.5:
+    resolution: {integrity: sha512-/ICuy7OHZxR0YCAZLNg9r7I9aijWUWvxaPR6uTuyxe8tAj5RL4Sw1+R6NhXUtOsarkGYPmaHdBDvuXh2DIN/uA==}
     dependencies:
       '@types/react': 17.0.44
     dev: true

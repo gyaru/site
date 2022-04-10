@@ -38,6 +38,7 @@ function Tag(props: { name: string }) {
   return <StyledTag>#{props.name}</StyledTag>;
 }
 
+// TODO: fix correct types
 const ArchivePage = ({ data }) => {
   console.log(data);
   return (

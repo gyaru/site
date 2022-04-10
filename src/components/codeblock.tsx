@@ -22,6 +22,7 @@ const Pre = styled.pre`
   } ;
 `;
 
+// TODO: fix correct types
 export default ({ children, className }) => {
   const language = className.replace(/language-/, "") || "";
   console.log(language);

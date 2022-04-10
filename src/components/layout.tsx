@@ -34,9 +34,8 @@ const StyledMenu = styled.main`
 
 const StyledMain = styled.main`
   box-sizing: border-box;
-  padding-top: 41px;
+  padding-top: 40px;
   max-width: 90%;
-
   @media (max-width: 1181px) {
     padding-top: 10px;
   }
@@ -60,6 +59,7 @@ export const PageTitle = styled.h1`
   }
 `;
 
+// TODO: fix correct types
 const Layout = ({ pageTitle, children }): JSX.Element => {
   console.log(pageTitle);
   const data = useStaticQuery(graphql`
@@ -78,10 +78,7 @@ const Layout = ({ pageTitle, children }): JSX.Element => {
       <StyledBlock>
         <StyledMain>
           {pageTitle == "Home Page" && (
-            <Helmet
-              title={`${data.site.siteMetadata.title}`}
-              defer={false}
-            />
+            <Helmet title={`${data.site.siteMetadata.title}`} defer={false} />
           )}
           {pageTitle !== "Home Page" && (
             <>

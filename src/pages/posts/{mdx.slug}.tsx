@@ -70,6 +70,7 @@ const components = {
   img: Image,
 };
 
+// TODO: fix correct types
 const BlogPost = ({ data }) => {
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
