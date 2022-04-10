@@ -2,6 +2,7 @@ import * as React from "react";
 import Layout, { PageTitle } from "../../components/layout";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXRenderer } from "gatsby-plugin-mdx";
+import { Helmet } from "react-helmet";
 import { graphql } from "gatsby";
 import styled from "styled-components";
 import codeblock from "../../components/codeblock";
@@ -72,6 +73,7 @@ const components = {
 const BlogPost = ({ data }) => {
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
+      <Helmet title={`${data.site.siteMetadata.title} - ${data.mdx.frontmatter.title}`} defer={false} />
       <PostDate>{data.mdx.frontmatter.date}</PostDate>
       <MDXProvider components={components} localImages={Image}>
         <MDXRenderer>{data.mdx.body}</MDXRenderer>
@@ -88,6 +90,11 @@ export const query = graphql`
         date(formatString: "MMMM D, YYYY")
       }
       body
+    }
+    site {
+      siteMetadata {
+        title
+      }
     }
   }
 `;

@@ -41,7 +41,7 @@ function Tag(props: { name: string }) {
 const ArchivePage = ({ data }) => {
   console.log(data);
   return (
-    <Layout pageTitle="Archive">
+    <Layout pageTitle="archive">
       {data.allMdx.nodes.map(
         (node: {
           id: React.Key;

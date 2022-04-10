@@ -2,6 +2,7 @@ import * as React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import Menu from "./menu";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 import "../styles/global.css";
 
 const StyledLayout = styled.div`
@@ -73,10 +74,24 @@ const Layout = ({ pageTitle, children }): JSX.Element => {
   return (
     <StyledLayout>
       <Menu />
-      <StyledMenu/>
+      <StyledMenu />
       <StyledBlock>
         <StyledMain>
-          {pageTitle !== "Home Page" && <PageTitle>{pageTitle}</PageTitle>}
+          {pageTitle == "Home Page" && (
+            <Helmet
+              title={`${data.site.siteMetadata.title}`}
+              defer={false}
+            />
+          )}
+          {pageTitle !== "Home Page" && (
+            <>
+              <Helmet
+                title={`${data.site.siteMetadata.title} - ${pageTitle}`}
+                defer={false}
+              />
+              <PageTitle>{pageTitle}</PageTitle>
+            </>
+          )}
           {children}
         </StyledMain>
       </StyledBlock>
