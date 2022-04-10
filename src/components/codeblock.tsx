@@ -5,12 +5,21 @@ import "@fontsource/overpass-mono";
 import styled from "styled-components";
 
 const Pre = styled.pre`
-  padding: 18px 0 0 18px;
+  padding: 15px 0 12px 15px;
   font-family: "Overpass Mono";
   overflow-x: auto;
   font-size: 13px;
   line-height: 15px;
   margin: 0;
+  .token-line {
+    &:last-child {
+      display: none;
+    }
+  }
+  @media (max-width: 700px) {
+    font-size: 10px;
+    padding: 10px 0 7px 10px;
+  } ;
 `;
 
 export default ({ children, className }) => {

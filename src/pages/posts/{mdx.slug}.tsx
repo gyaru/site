@@ -17,12 +17,19 @@ const StyledP = styled.p`
   margin: 0 0 17px;
   font-size: 17px;
   line-height: 27px;
+  @media (max-width: 700px) {
+    font-size: 14px;
+  }
 `;
 
 const StyledBlockquote = styled.blockquote`
   border-left: 5px solid #b48ead;
   margin: 0 0 0 15px;
   padding: 0 0 0 10px;
+  @media (max-width: 700px) {
+    margin: 0 0 0 10px;
+    padding: 0 0 0 5px;
+  }
 `;
 
 const StyledH2 = styled.h2`
@@ -31,6 +38,9 @@ const StyledH2 = styled.h2`
   margin: 0 0 17px;
   font-size: 27px;
   line-height: 27px;
+  @media (max-width: 700px) {
+    font-size: 20px;
+  }
 `;
 
 const StyledA = styled.a`

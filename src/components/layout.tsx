@@ -8,17 +8,27 @@ const StyledLayout = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
+  align-items: center;
   @media (min-width: 1182px) {
     flex-direction: row;
+    align-items: flex-start;
   }
 `;
 
 const StyledBlock = styled.main`
   display: flex;
-  width: 100%;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  max-width: 100%;
+`;
+
+const StyledMenu = styled.main`
+  width: 200px;
+  height: 100vh;
+  @media (max-width: 1181px) {
+    display: none;
+  }
 `;
 
 const StyledMain = styled.main`
@@ -33,7 +43,6 @@ const StyledMain = styled.main`
     max-width: 960px;
     min-width: 960px;
     width: 960px;
-    margin-left: 200px;
   }
 `;
 
@@ -64,6 +73,7 @@ const Layout = ({ pageTitle, children }): JSX.Element => {
   return (
     <StyledLayout>
       <Menu />
+      <StyledMenu/>
       <StyledBlock>
         <StyledMain>
           {pageTitle !== "Home Page" && <PageTitle>{pageTitle}</PageTitle>}
